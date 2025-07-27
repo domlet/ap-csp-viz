@@ -45,6 +45,10 @@ let wiggleAmplitude = 10;
 let ringRadius = 200;
 let dragIndex = -1;
 let textSizeSmall = 11;
+// select student UI
+let selectedStudentIndex = -1;
+let studentDropdown;
+let leftArrowBtn, rightArrowBtn;
 
 function setup() {
   createCanvas(1000, 1000);
@@ -67,6 +71,8 @@ function setup() {
     bigIdeas[i].noiseSeedX = random(1000);
     bigIdeas[i].noiseSeedY = random(1000);
   }
+  createStudentUI();
+  noLoop();
 }
 
 function draw() {
@@ -74,57 +80,177 @@ function draw() {
   drawBigIdeaLegend();
   drawPracticesLegend();
 
+  // Calculate the center of all circles
+  let avgX = 0;
+  let avgY = 0;
   for (let i = 0; i < bigIdeas.length; i++) {
     let idea = bigIdeas[i];
-
     if (!idea.dragging) {
       idea.offsetX = map(noise(frameCount * 0.005 + idea.noiseSeedX), 0, 1, -wiggleAmplitude, wiggleAmplitude);
       idea.offsetY = map(noise(frameCount * 0.005 + idea.noiseSeedY), 0, 1, -wiggleAmplitude, wiggleAmplitude);
     }
+    avgX += idea.baseX + idea.offsetX;
+    avgY += idea.baseY + idea.offsetY;
+  }
+  avgX /= bigIdeas.length;
+  avgY /= bigIdeas.length;
 
+  // Draw student name and overall percent in center of circles if selected
+  if (selectedStudentIndex >= 0 && students[selectedStudentIndex]) {
+    let student = students[selectedStudentIndex];
+    textAlign(CENTER, CENTER);
+    textFont("monospace");
+    textStyle(BOLD);
+    textSize(24);
+    fill(0);
+    text(student.name, avgX, avgY);
+
+    // Calculate overall percent (average of 5 scores, out of 5)
+    let total = 0;
+    let count = 0;
+    for (let idea of bigIdeas) {
+      total += student[idea.acronym];
+      count++;
+    }
+    let percent = ((total / (count * 5)) * 100).toFixed(1) + "%";
+    textStyle(NORMAL);
+    textSize(16);
+    textFont("monospace");
+    text(percent, avgX, avgY + 28);
+  }
+
+  for (let i = 0; i < bigIdeas.length; i++) {
+    let idea = bigIdeas[i];
     let x = idea.baseX + idea.offsetX;
     let y = idea.baseY + idea.offsetY;
 
-    stroke("#d8d8d8"); // Add 1px black outline
+    stroke("#d8d8d8");
     strokeWeight(1);
     fill(idea.color);
     ellipse(x, y, idea.radius * 2);
-    noStroke(); // Disable stroke for subsequent shapes
+    noStroke();
 
     let label = idea.acronym;
     textSize(24);
     textStyle(BOLD);
     fill(0);
+    textFont("monospace");
     drawCircleLabels(label, x, y);
 
-    // --- Center bars vertically with the circle ---
+    // --- Use the same bar dimensions as drawBars ---
     let barCount = 5;
-    let barHeight = (20 * 2) / 3;
+    let barWidth = (20 * 2) / 3;
+    let barHeight = (10 * 2) / 3;
     let spacing = (5 * 2) / 3 + 3;
-    let barsTotalHeight = barCount * barHeight + (barCount - 1) * spacing;
-    let barsY = y - barsTotalHeight / 2;
-    drawBars(x + idea.radius + 20, barsY, idea.color);
-  }
+    let totalBarsWidth = barCount * barWidth + (barCount - 1) * spacing;
+    let barsX = x - totalBarsWidth / 2;
+    let barsY = y + idea.radius + 18; // 18px below the circle
 
+    let barsToShow = barCount;
+    let score = null;
+    if (selectedStudentIndex >= 0 && students[selectedStudentIndex]) {
+      barsToShow = students[selectedStudentIndex][idea.acronym];
+      score = barsToShow;
+    }
+
+    // Draw score text on the left of the bars
+    if (score !== null) {
+      textAlign(RIGHT, CENTER);
+      textFont("monospace");
+      textStyle(NORMAL);
+      textSize(textSizeSmall);
+      fill(0);
+      text(`${score} of 5`, barsX - 10, barsY + barHeight / 2);
+    }
+
+    // Draw the bars horizontally
+    drawBars(barsX, barsY, idea.color, barsToShow, true);
+  }
   drawPracticeTooltips();
   drawBigIdeaTooltips();
 }
 
-function drawBars(x, y, colorCode) {
-  let barWidth = (10 * 2) / 3; // Reduced by 1/3
-  let barHeight = (20 * 2) / 3; // Reduced by 1/3
-  let spacing = (5 * 2) / 3 + 3; // Optional: reduce spacing for compactness
-  for (let i = 0; i < 5; i++) {
-    // Draw silver outline offset by 2px
-    stroke("#d8d8d8");
-    strokeWeight(1);
-    fill(255, 0); // Transparent fill for outline
-    rect(x - 2, y + i * (barHeight + spacing) - 2, barWidth + 4, barHeight + 4, 4);
+function createStudentUI() {
+  // Remove old UI if exists
+  if (studentDropdown) studentDropdown.remove();
+  if (leftArrowBtn) leftArrowBtn.remove();
+  if (rightArrowBtn) rightArrowBtn.remove();
 
-    // Draw the colored bar
-    noStroke();
-    fill(colorCode);
-    rect(x, y + i * (barHeight + spacing), barWidth, barHeight, 2);
+  // Dropdown
+  studentDropdown = createSelect();
+  studentDropdown.position(40 + 40, 40 + bigIdeas.length * 20 + 20);
+  studentDropdown.style("font-family", "monospace");
+  studentDropdown.option("Select a Student", -1);
+  students.forEach((s, i) => studentDropdown.option(s.name, i));
+  studentDropdown.selected(selectedStudentIndex >= 0 ? selectedStudentIndex : -1);
+  studentDropdown.changed(() => {
+    selectedStudentIndex = int(studentDropdown.value());
+    redraw();
+  });
+
+  // Left arrow button
+  leftArrowBtn = createButton("←");
+  leftArrowBtn.position(studentDropdown.x - 35, studentDropdown.y - 2);
+  leftArrowBtn.size(30, 28);
+  leftArrowBtn.style("font-size", "18px");
+  leftArrowBtn.mousePressed(() => {
+    if (students.length === 0) return;
+    if (selectedStudentIndex <= 0) selectedStudentIndex = students.length - 1;
+    else selectedStudentIndex--;
+    studentDropdown.selected(selectedStudentIndex);
+    redraw();
+  });
+
+  // Right arrow button
+  rightArrowBtn = createButton("→");
+  rightArrowBtn.position(studentDropdown.x + studentDropdown.elt.offsetWidth + 5, studentDropdown.y - 2);
+  rightArrowBtn.size(30, 28);
+  rightArrowBtn.style("font-size", "18px");
+  rightArrowBtn.mousePressed(() => {
+    if (students.length === 0) return;
+    if (selectedStudentIndex >= students.length - 1) selectedStudentIndex = 0;
+    else selectedStudentIndex++;
+    studentDropdown.selected(selectedStudentIndex);
+    redraw();
+  });
+}
+
+function drawBars(x, y, colorCode, barsToShow = 5, horizontal = true) {
+  let barCount = 5;
+  let barWidth = (20 * 2) / 3;
+  let barHeight = (10 * 2) / 3;
+  let spacing = (5 * 2) / 3 + 3;
+
+  if (horizontal) {
+    // Draw bars left-to-right, centered at (x, y)
+    for (let i = 0; i < barCount; i++) {
+      // Always draw 5 outlines
+      stroke("#d8d8d8");
+      strokeWeight(1);
+      fill(255, 0);
+      rect(x + i * (barWidth + spacing) - 2, y - 2, barWidth + 4, barHeight + 4, 4);
+
+      // Draw the colored bar only if within barsToShow
+      if (i < barsToShow) {
+        noStroke();
+        fill(colorCode);
+        rect(x + i * (barWidth + spacing), y, barWidth, barHeight, 2);
+      }
+    }
+  } else {
+    // Original vertical bars (not used in this case)
+    for (let i = 0; i < barCount; i++) {
+      stroke("#d8d8d8");
+      strokeWeight(1);
+      fill(255, 0);
+      rect(x - 2, y + i * (barHeight + spacing) - 2, barWidth + 4, barHeight + 4, 4);
+
+      if (i < barsToShow) {
+        noStroke();
+        fill(colorCode);
+        rect(x, y + i * (barHeight + spacing), barWidth, barHeight, 2);
+      }
+    }
   }
 }
 
