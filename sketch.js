@@ -3,42 +3,33 @@ let bigIdeas = [
   { number: 2, label: "Data", acronym: "DAT", weight: 20, color: "#21c5cc" },
   { number: 3, label: "Algorithms & Programming", acronym: "AAP", weight: 35, color: "#d5ea36" },
   { number: 4, label: "Systems & Networks", acronym: "CSN", weight: 13, color: "#f5e85a" },
-  { number: 5, label: "Impact of Computing", acronym: "IOC", weight: 25, color: "#f9b325" }
+  { number: 5, label: "Impact of Computing", acronym: "IOC", weight: 25, color: "#f9b325" },
 ];
 
 let students = [
-  { id: 098345, label: "Computational Solution Design", color: "#c3407e" },
-]
-  let practices = [
+  { name: "Alice", CRD: 4, DAT: 5, AAP: 3, CSN: 4, IOC: 5 },
+  { name: "Jorge", CRD: 2, DAT: 3, AAP: 4, CSN: 3, IOC: 2 },
+  { name: "Charlie", CRD: 5, DAT: 4, AAP: 5, CSN: 5, IOC: 4 },
+  { name: "Javon", CRD: 3, DAT: 2, AAP: 2, CSN: 4, IOC: 3 },
+  { name: "Eli", CRD: 1, DAT: 2, AAP: 3, CSN: 1, IOC: 2 },
+];
+
+let practices = [
   { number: 1, label: "Computational Solution Design", color: "#c3407e" },
   { number: 2, label: "Algorithms and Program Development", color: "#4f81bd" },
   { number: 3, label: "Abstraction in Program Development", color: "#de6e43" },
   { number: 4, label: "Code Analysis", color: "#f7c242" },
   { number: 5, label: "Computing Innovations", color: "#35c6b1" },
-  { number: 6, label: "Responsible Computing", color: "#f7941e" }
+  { number: 6, label: "Responsible Computing", color: "#f7941e" },
 ];
 
 let practiceSkills = {
-  1: ["1.A Investigate the situation, context, or task.",
-      "1.B Determine and design an appropriate method or approach.",
-      "1.C Explain how collaboration affects development of a solution.",
-      "1.D Evaluate solution options."],
-  2: ["2.A Represent algorithmic processes without code.",
-      "2.B Implement and apply an algorithm."],
-  3: ["3.A Generalize data sources through variables.",
-      "3.B Use abstraction to manage complexity.",
-      "3.C Explain how abstraction manages complexity."],
-  4: ["4.A Explain how a code segment functions.",
-      "4.B Determine the result of code segments.",
-      "4.C Identify and correct errors in algorithms and programs."],
-  5: ["5.A Explain how computing systems work.",
-      "5.B Explain how knowledge is generated from data.",
-      "5.C Describe impact of a computing innovation.",
-      "5.D Describe the impact of gathering data.",
-      "5.E Evaluate computing using legal and ethical factors."],
-  6: ["6.A Collaborate in the development of solutions.",
-      "6.B Use safe and secure methods.",
-      "6.C Acknowledge intellectual property."]
+  1: ["1.A Investigate the situation, context, or task.", "1.B Determine and design an appropriate method or approach.", "1.C Explain how collaboration affects development of a solution.", "1.D Evaluate solution options."],
+  2: ["2.A Represent algorithmic processes without code.", "2.B Implement and apply an algorithm."],
+  3: ["3.A Generalize data sources through variables.", "3.B Use abstraction to manage complexity.", "3.C Explain how abstraction manages complexity."],
+  4: ["4.A Explain how a code segment functions.", "4.B Determine the result of code segments.", "4.C Identify and correct errors in algorithms and programs."],
+  5: ["5.A Explain how computing systems work.", "5.B Explain how knowledge is generated from data.", "5.C Describe impact of a computing innovation.", "5.D Describe the impact of gathering data.", "5.E Evaluate computing using legal and ethical factors."],
+  6: ["6.A Collaborate in the development of solutions.", "6.B Use safe and secure methods.", "6.C Acknowledge intellectual property."],
 };
 
 let bigIdeaDescriptions = {
@@ -46,19 +37,19 @@ let bigIdeaDescriptions = {
   2: "BIG IDEA 2: DATA (DAT)\nData are central to computing innovations because they communicate\ninitial conditions to programs and represent new knowledge. Computers\nconsume data, transform data, and produce new data, allowing users\nto create new information or knowledge to solve problems through the\ninterpretation of those data. Computers store data digitally, which means\nthat the data must be manipulated in order to be presented in a useful way\nto the user.",
   3: "BIG IDEA 3: ALGORITHMS AND PROGRAMMING (AAP)\nProgrammers integrate algorithms and abstraction to create programs\nfor creative purposes and to solve problems. Using multiple program\nstatements in a specified order, making decisions, and repeating the same\nprocess multiple times are the building blocks of programs. Incorporating\nelements of abstraction—by breaking problems down into interacting\npieces, each with their own purpose—makes writing complex programs\neasier. Programmers need to think algorithmically and use abstraction to\ndefine and interpret processes that are used in a program.",
   4: "BIG IDEA 4: COMPUTING SYSTEMS AND NETWORKS (CSN)\nComputer systems and networks are used to transfer data. One of the\nlargest and most commonly used networks is the Internet. Through a series\nof protocols, the Internet can be used to send and receive information and\nideas throughout the world. Transferring and processing information can be\nslow when done on a single computer, but leveraging multiple computers to\ndo the work at the same time can significantly shorten the time it takes to\ncomplete tasks or solve problems.",
-  5: "BIG IDEA 5: IMPACT OF COMPUTING (IOC)\nComputers and computing have revolutionized our lives. To use computing\nsafely and responsibly, we need to be aware of privacy, security, and\nethical issues. As programmers, we need to understand the potential\nimpacts of our programs and be responsible for the consequences.\nAs computer users, we need to understand any potential beneficial or\nharmful effects and how to protect ourselves and our privacy when using\na computer."
+  5: "BIG IDEA 5: IMPACT OF COMPUTING (IOC)\nComputers and computing have revolutionized our lives. To use computing\nsafely and responsibly, we need to be aware of privacy, security, and\nethical issues. As programmers, we need to understand the potential\nimpacts of our programs and be responsible for the consequences.\nAs computer users, we need to understand any potential beneficial or\nharmful effects and how to protect ourselves and our privacy when using\na computer.",
 };
-
 
 let scaleFactor = 18;
 let wiggleAmplitude = 10;
 let ringRadius = 200;
 let dragIndex = -1;
+let textSizeSmall = 11;
 
 function setup() {
   createCanvas(1000, 1000);
-  textFont('sans-serif');
-  textSize(12);
+  textFont("monospace"); // Use fixed width font
+  textSize(textSizeSmall);
 
   let centerX = width / 2 - 150;
   let centerY = height / 2 + 60;
@@ -67,8 +58,8 @@ function setup() {
     let angle = TWO_PI * (i / bigIdeas.length) - HALF_PI;
     let radius = sqrt(bigIdeas[i].weight) * scaleFactor;
 
-    bigIdeas[i].baseX = centerX + cos(angle) * ringRadius + 50;
-    bigIdeas[i].baseY = centerY + sin(angle) * ringRadius - 40;
+    bigIdeas[i].baseX = centerX + cos(angle) * ringRadius - 20;
+    bigIdeas[i].baseY = centerY + sin(angle) * ringRadius - 80;
     bigIdeas[i].dragging = false;
     bigIdeas[i].radius = radius;
     bigIdeas[i].offsetX = 0;
@@ -81,7 +72,7 @@ function setup() {
 function draw() {
   background(255);
   drawBigIdeaLegend();
-  drawPracticeLegend();
+  drawPracticesLegend();
 
   for (let i = 0; i < bigIdeas.length; i++) {
     let idea = bigIdeas[i];
@@ -94,16 +85,25 @@ function draw() {
     let x = idea.baseX + idea.offsetX;
     let y = idea.baseY + idea.offsetY;
 
+    stroke("#d8d8d8"); // Add 1px black outline
+    strokeWeight(1);
     fill(idea.color);
     ellipse(x, y, idea.radius * 2);
+    noStroke(); // Disable stroke for subsequent shapes
 
-    let label = `${idea.number}. ${idea.label} (${idea.acronym})`;
-    let labelRadius = idea.radius + 14;
-    textSize(14); // Match legend heading
+    let label = idea.acronym;
+    textSize(24);
+    textStyle(BOLD);
     fill(0);
-    drawTextAlongArc(label, x, y, labelRadius, -HALF_PI, 1);
+    drawCircleLabels(label, x, y);
 
-    drawBars(x + idea.radius + 20, y - 30, idea.color);
+    // --- Center bars vertically with the circle ---
+    let barCount = 5;
+    let barHeight = (20 * 2) / 3;
+    let spacing = (5 * 2) / 3 + 3;
+    let barsTotalHeight = barCount * barHeight + (barCount - 1) * spacing;
+    let barsY = y - barsTotalHeight / 2;
+    drawBars(x + idea.radius + 20, barsY, idea.color);
   }
 
   drawPracticeTooltips();
@@ -111,37 +111,31 @@ function draw() {
 }
 
 function drawBars(x, y, colorCode) {
-  let barWidth = 10;
-  let barHeight = 20;
-  let spacing = 5;
-  fill(colorCode);
-  noStroke();
+  let barWidth = (10 * 2) / 3; // Reduced by 1/3
+  let barHeight = (20 * 2) / 3; // Reduced by 1/3
+  let spacing = (5 * 2) / 3 + 3; // Optional: reduce spacing for compactness
   for (let i = 0; i < 5; i++) {
+    // Draw silver outline offset by 2px
+    stroke("#d8d8d8");
+    strokeWeight(1);
+    fill(255, 0); // Transparent fill for outline
+    rect(x - 2, y + i * (barHeight + spacing) - 2, barWidth + 4, barHeight + 4, 4);
+
+    // Draw the colored bar
+    noStroke();
+    fill(colorCode);
     rect(x, y + i * (barHeight + spacing), barWidth, barHeight, 2);
   }
 }
 
-function drawTextAlongArc(str, centerX, centerY, radius, startAngle, direction = 1) {
-  let angle = startAngle;
+function drawCircleLabels(str, centerX, centerY) {
+  // Draw white text centered in the circle
+  push();
+  fill(255);
   textAlign(CENTER, CENTER);
-  let arcLength = 0;
-  for (let i = 0; i < str.length; i++) {
-    arcLength += textWidth(str[i]) / radius;
-  }
-
-  angle -= direction * arcLength / 2;
-  for (let i = 0; i < str.length; i++) {
-    let charWidth = textWidth(str[i]);
-    let theta = angle + direction * (charWidth / 2) / radius;
-    let x = centerX + cos(theta) * radius;
-    let y = centerY + sin(theta) * radius;
-    push();
-    translate(x, y);
-    rotate(theta + direction * HALF_PI);
-    text(str[i], 0, 0);
-    pop();
-    angle += direction * charWidth / radius;
-  }
+  textStyle(BOLD);
+  text(str, centerX, centerY);
+  pop();
 }
 
 function drawBigIdeaLegend() {
@@ -151,39 +145,34 @@ function drawBigIdeaLegend() {
 
   fill(0);
   textAlign(LEFT, TOP);
-  textSize(14);
+  textSize(textSizeSmall);
   text("Big Ideas", legendX, legendY - 30);
+  textStyle(NORMAL);
 
-  textSize(12);
+  textSize(textSizeSmall);
   for (let i = 0; i < bigIdeas.length; i++) {
     let idea = bigIdeas[i];
     fill(idea.color);
     ellipse(legendX, legendY + i * lineHeight, 12);
 
     fill(0);
-    text(
-      `${idea.number}. ${idea.label} (${idea.acronym}) ${idea.weight}%`,
-      legendX + 20,
-      legendY - 6 + i * lineHeight
-    );
+    text(`${idea.number}. ${idea.acronym} – ${idea.label} (${idea.weight}%)`, legendX + 20, legendY - 6 + i * lineHeight);
   }
 }
 
-
-
-
-function drawPracticeLegend() {
-  let startX = width - 530;
+function drawPracticesLegend() {
+  let startX = width - 670;
   let startY = 40;
   let rectSize = 15;
   let lineHeight = 22 * 0.9; // Match top-left legend line spacing
 
   fill(0);
-  textSize(14);
+  textSize(textSizeSmall);
   textAlign(LEFT, TOP);
+  textStyle(BOLD);
   text("Computational Thinking Practices", startX, startY - 30);
-
-  textSize(12);
+  textStyle(NORMAL);
+  textSize(textSizeSmall);
   for (let i = 0; i < practices.length; i++) {
     let p = practices[i];
     let y = startY + i * lineHeight;
@@ -208,9 +197,7 @@ function drawPracticeTooltips() {
     let labelW = 250;
     let labelH = 20;
 
-    let isHover =
-      (mouseX >= p.x && mouseX <= p.x + p.w && mouseY >= p.y && mouseY <= p.y + p.h) ||
-      (mouseX >= labelX && mouseX <= labelX + labelW && mouseY >= labelY && mouseY <= labelY + labelH);
+    let isHover = (mouseX >= p.x && mouseX <= p.x + p.w && mouseY >= p.y && mouseY <= p.y + p.h) || (mouseX >= labelX && mouseX <= labelX + labelW && mouseY >= labelY && mouseY <= labelY + labelH);
 
     if (isHover) {
       let skills = practiceSkills[p.number];
@@ -235,7 +222,7 @@ function drawPracticeTooltips() {
 
       noStroke();
       textAlign(LEFT, TOP);
-      textSize(12);
+      textSize(textSizeSmall);
 
       for (let j = 0; j < skills.length; j++) {
         let line = skills[j];
@@ -262,7 +249,7 @@ function drawBigIdeaTooltips() {
   let legendY = 40;
   let lineHeight = 22 * 0.9;
 
-  textSize(12);
+  textSize(textSizeSmall);
   textAlign(LEFT, TOP);
 
   for (let i = 0; i < bigIdeas.length; i++) {
@@ -272,14 +259,12 @@ function drawBigIdeaTooltips() {
     let r = 12;
     let textX = x + 20;
     let textW = textWidth(`${idea.number}. ${idea.label}`);
-    let hover =
-      (mouseX > x - r && mouseX < x + r && mouseY > y - r && mouseY < y + r) ||
-      (mouseX > textX && mouseX < textX + textW && mouseY > y - 6 && mouseY < y + 10);
+    let hover = (mouseX > x - r && mouseX < x + r && mouseY > y - r && mouseY < y + r) || (mouseX > textX && mouseX < textX + textW && mouseY > y - 6 && mouseY < y + 10);
 
     if (hover) {
       let desc = bigIdeaDescriptions[idea.number];
       let lines = desc.split("\n");
-      let maxW = max(lines.map(l => textWidth(l))) + 20;
+      let maxW = max(lines.map((l) => textWidth(l))) + 20;
       let boxH = lines.length * 18 + 20;
       let boxX = mouseX + 15;
       let boxY = mouseY + 15;
@@ -296,8 +281,6 @@ function drawBigIdeaTooltips() {
     }
   }
 }
-
-
 
 // Drag logic
 function mousePressed() {
